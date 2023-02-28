@@ -81,9 +81,6 @@ const callPatchFunction = async (payloadData) => {
         // "async": null,
         "get_call_id": get_call_id,
     }
-
-    // console.log("call patch payload :::::::::::::::::::::", callpatchPayload)
-
     // callpatch headers
     const voiceApiHeaders = {
         "accept": "application/json",
@@ -92,7 +89,6 @@ const callPatchFunction = async (payloadData) => {
     }
 
     try {
-
         // Calling the API using axios
         const resp = await axios.post(voiceUrls.MTALKZ_VOICE_CALLPATCH_API, callpatchPayload, {
             headers: voiceApiHeaders,
@@ -108,38 +104,24 @@ const callPatchFunction = async (payloadData) => {
             result['apikey'] = apikey
             result['number'] = to
             result['call_id'] = resp.data.call_id
-
             // console.log(` Response from the call is: ${JSON.stringify(result)}`)
-
             return result
         }
-
         // If agent cuts the call
         else {
-
             let result = responses.callCut
-
-
             result['requestid'] = requestid
             result['apikey'] = apikey
             result['number'] = to
-
             // console.log(` Response from the call is: ${JSON.stringify(result)}`)
-
             return result
         }
     } catch (err) {
-
         // Error if call is not picked
-
         let result = responses.notPicked
-
         result['requestid'] = requestid
         result['apikey'] = apikey
         result['number'] = to
-
-        // console.log(` Response from the call is: ${JSON.stringify(result)}`)
-
         return result
     }
 }

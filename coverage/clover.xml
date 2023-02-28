@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1677566951295" clover="3.2.0">
+  <project timestamp="1677566951295" name="All files">
+    <metrics statements="16" coveredstatements="15" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1" elements="17" coveredelements="16" complexity="0" loc="16" ncloc="16" packages="1" files="2" classes="2"/>
+    <file name="PayloadQueue.js" path="/mnt/d/Mtalkz/mt-voice-callpatch-worker/PayloadQueue.js">
+      <metrics statements="9" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="7" count="1" type="stmt"/>
+      <line num="30" count="1" type="stmt"/>
+      <line num="32" count="1" type="stmt"/>
+      <line num="40" count="1" type="stmt"/>
+      <line num="43" count="1" type="stmt"/>
+      <line num="47" count="0" type="stmt"/>
+      <line num="50" count="1" type="stmt"/>
+    </file>
+    <file name="data.js" path="/mnt/d/Mtalkz/mt-voice-callpatch-worker/data.js">
+      <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <line num="2" count="1" type="stmt"/>
+      <line num="6" count="1" type="stmt"/>
+      <line num="12" count="1" type="stmt"/>
+      <line num="19" count="1" type="stmt"/>
+      <line num="29" count="1" type="stmt"/>
+      <line num="54" count="1" type="stmt"/>
+      <line num="57" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>

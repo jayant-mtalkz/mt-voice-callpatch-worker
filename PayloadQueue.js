@@ -49,3 +49,4 @@ try {
 } catch (err) {
     console.log(`Error Creating ${voiceQueue.callpatch} :`, err)
 }
+module.exports = queuePayload
