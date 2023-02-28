@@ -1,6 +1,7 @@
 const { Queue } = require('bullmq')
 
 const { voiceQueue } = require('./data')
+const { redisConnection } = require('./config/redisConfig')
 
 // worker payload
 
@@ -9,8 +10,14 @@ const queuePayload = {
     "apikey": "jxqA2OvBovo6VLRb",
     "data": {
         // "from": "6395938635",
+        // "to": "6395938635",
+
+        // "from": "9205732793",
+        // "to": "9205732793",
+
         "from": "8081701067",
         "to": "8081701067",
+
         "campaign": "279648",
         "caller_id": "918069859000",
         "call_timeout": 120,
@@ -29,10 +36,7 @@ const queuePayload = {
 try {
     // Creating queue
     const myQueue = new Queue(voiceQueue.callpatch, {
-        connection: {
-            host: '127.0.0.1',
-            port: 6379,
-        }
+        connection: redisConnection
     })
 
     async function addJobs() {

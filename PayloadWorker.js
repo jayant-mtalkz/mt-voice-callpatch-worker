@@ -3,61 +3,67 @@ const Redis = require('ioredis')
 
 const { Queue, Worker } = require('bullmq')
 
-const { voiceUrls, voiceApiHeaders, callpatchPayload, voiceQueue, responses, DefaultTTL } = require('./data')
+const { voiceUrls, voiceApiHeaders, voiceQueue, responses, DefaultTTL } = require('./data')
 
+const { redisConnection } = require('./config/redisConfig')
 
 try {
 
-    const myQueue = new Queue(voiceQueue.events, {
-        connection: {
-            host: '127.0.0.1',
-            port: 6379,
-        }
-    })
+    // Creating redis connection
 
-    const redis = new Redis({
-        host: '127.0.0.1',
-        port: 6379,
-    })
+    const redis = new Redis(redisConnection)
 
+    // Creating voice-callpatch-tatatele worker
 
-    try {
-        const worker = new Worker(voiceQueue.callpatch, async job => {
+    const worker = new Worker(
+        voiceQueue.callpatch,
+        async (job) => {
+
             //console.log(job.data);
             console.log(`Consumed data from ${voiceQueue.callpatch} queue`)
             console.log(job.data)
+
+            // Getting response from tatatele
             const callResponse = await callPatchFunction(job.data)
-            // console.log("::::::::::::worker-running::::::::::", res)
+
+            // Checking if the call is picked or not
 
             if ('call_id' in callResponse) {
                 const mapKey = `REQMAP:voice:${callResponse.call_id}`
                 await redis.set(mapKey, JSON.stringify(callResponse), 'ex', DefaultTTL)
+
+                const numKey = `REQM:${callResponse.apikey}:${callResponse.requestid}:${callResponse.number}`
+                await redis.set(numKey, JSON.stringify(callResponse), 'ex', DefaultTTL)
             }
+
+            // Creating event queue for storing the response
+
+            const myQueue = new Queue(voiceQueue.events, {
+                connection: redisConnection
+            })
+
+            // Adding response to the queue
 
             await myQueue.add('callResponse', callResponse)
 
             // console.log(` Response from the call is: ${JSON.stringify(callResponse)}`)
+        },
 
-        })
-    } catch (err) {
-        console.log("Error Creating Worker :", err)
-    }
+        // Setting the concurrency level
+        { concurrency: 10 },
+    )
 
-
-    // async function addJobs() {
-    //     await myQueue.add('callResponse', callResponse)
-    // }
-
-    // addJobs()
-
-    // console.log(`Payload added to queue: ${voiceQueue.events}`)
-
+    // Catching Error
 } catch (err) {
-    console.log(`Error Creating ${voiceQueue.events} :`, err)
+    console.log('Error', err)
 }
 
 
+// Function for calling API and getting response
+
 const callPatchFunction = async (payloadData) => {
+
+    // Getting required data from payload
 
     const { requestid, apikey } = payloadData
 
@@ -65,24 +71,34 @@ const callPatchFunction = async (payloadData) => {
 
     const { token } = integration.params
 
-    callpatchPayload['agent_number'] = from
-    callpatchPayload['destination_number'] = to
-    callpatchPayload['caller_id'] = caller_id
-    callpatchPayload['call_timeout'] = call_timeout
-    callpatchPayload['get_call_id'] = get_call_id
+    // callpatch payload 
+    const callpatchPayload = {
+        "agent_number": from,
+        "destination_number": to,
+        "caller_id": caller_id,
+        "call_timeout": call_timeout,
+        // "custom_identifier": null,
+        // "async": null,
+        "get_call_id": get_call_id,
+    }
 
     // console.log("call patch payload :::::::::::::::::::::", callpatchPayload)
 
-    voiceApiHeaders['Authorization'] = token
+    // callpatch headers
+    const voiceApiHeaders = {
+        "accept": "application/json",
+        "Authorization": token,
+        "content-type": "application/json",
+    }
 
     try {
 
+        // Calling the API using axios
         const resp = await axios.post(voiceUrls.MTALKZ_VOICE_CALLPATCH_API, callpatchPayload, {
             headers: voiceApiHeaders
         })
 
-        // console.log("resp data ::::::::::#########::::::::::::", resp.data)
-        //console.log(resp)
+        // Checking if the call is picked or not
 
         if ('call_id' in resp.data) {
 
@@ -97,6 +113,8 @@ const callPatchFunction = async (payloadData) => {
 
             return result
         }
+
+        // If agent cuts the call
         else {
 
             let result = responses.callCut
@@ -110,8 +128,9 @@ const callPatchFunction = async (payloadData) => {
 
             return result
         }
-
     } catch (err) {
+
+        // Error if call is not picked
 
         let result = responses.notPicked
 

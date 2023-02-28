@@ -8,24 +8,6 @@ const voiceQueue = {
     events: "events-voice-callpatch-tatatele",
 }
 
-// callpatch headers
-const voiceApiHeaders = {
-    "accept": "application/json",
-    "Authorization": null,
-    "content-type": "application/json",
-}
-
-// callpatch payload 
-const callpatchPayload = {
-    "agent_number": null,
-    "destination_number": null,
-    "caller_id": null,
-    "call_timeout": null,
-    // "custom_identifier": null,
-    // "async": null,
-    "get_call_id": null,
-}
-
 const responses = {
     notPicked: {
         requestid: null,
@@ -53,11 +35,8 @@ const responses = {
 
 const DefaultTTL = 7 * 24 * 60 * 60
 
-
 module.exports = {
     voiceUrls,
-    voiceApiHeaders,
-    callpatchPayload,
     voiceQueue,
     responses,
     DefaultTTL,
