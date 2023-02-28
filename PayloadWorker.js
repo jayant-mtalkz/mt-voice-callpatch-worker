@@ -3,7 +3,7 @@ const Redis = require('ioredis')
 
 const { Queue, Worker } = require('bullmq')
 
-const { voiceUrls, voiceApiHeaders, voiceQueue, responses, DefaultTTL } = require('./data')
+const { voiceUrls, voiceQueue, responses, DefaultTTL } = require('./data')
 
 const { redisConnection } = require('./config/redisConfig')
 
@@ -95,7 +95,7 @@ const callPatchFunction = async (payloadData) => {
 
         // Calling the API using axios
         const resp = await axios.post(voiceUrls.MTALKZ_VOICE_CALLPATCH_API, callpatchPayload, {
-            headers: voiceApiHeaders
+            headers: voiceApiHeaders,
         })
 
         // Checking if the call is picked or not
