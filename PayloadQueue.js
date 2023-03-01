@@ -9,14 +9,14 @@ const queuePayload = {
     "requestid": "kBJCkhdQOd1Zr4s",
     "apikey": "jxqA2OvBovo6VLRb",
     "data": {
-        // "from": "6395938635",
-        // "to": "6395938635",
+        "from": "6395938635",
+        "to": "6395938635",
 
         // "from": "9205732793",
         // "to": "9205732793",
 
-        "from": "8081701067",
-        "to": "8081701067",
+        // "from": "8081701067",
+        // "to": "8081701067",
 
         "campaign": "279648",
         "caller_id": "918069859000",
@@ -44,9 +44,8 @@ try {
     }
 
     addJobs()
-    // console.log(`Payload added to queue: ${voiceQueue.callpatch}`)
+    //console.log(`Payload added to queue: ${voiceQueue.callpatch}`)
 
 } catch (err) {
     console.log(`Error Creating ${voiceQueue.callpatch} :`, err)
 }
-module.exports = queuePayload
