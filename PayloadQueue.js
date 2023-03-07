@@ -1,6 +1,6 @@
 const { Queue } = require('bullmq')
 
-const { voiceQueue } = require('./data')
+const { voiceQueue } = require('./config/data')
 const { redisConnection } = require('./config/redisConfig')
 
 // worker payload
@@ -9,14 +9,14 @@ const queuePayload = {
     "requestid": "kBJCkhdQOd1Zr4s",
     "apikey": "jxqA2OvBovo6VLRb",
     "data": {
-        "from": "6395938635",
-        "to": "6395938635",
+        // "from": "6395938635",
+        // "to": "6395938635",
 
         // "from": "9205732793",
         // "to": "9205732793",
 
-        // "from": "8081701067",
-        // "to": "8081701067",
+        "from": "918081701067",
+        "to": "918081701067",
 
         "campaign": "279648",
         "caller_id": "918069859000",
@@ -35,17 +35,17 @@ const queuePayload = {
 
 try {
     // Creating queue
-    const myQueue = new Queue(voiceQueue.callpatch, {
+    const myQueue = new Queue(voiceQueue.voiceCallPatchTatatele, {
         connection: redisConnection
     })
 
     async function addJobs() {
-        await myQueue.add('call', queuePayload)
+        await myQueue.add('call', JSON.stringify(queuePayload))
     }
 
     addJobs()
     //console.log(`Payload added to queue: ${voiceQueue.callpatch}`)
 
 } catch (err) {
-    console.log(`Error Creating ${voiceQueue.callpatch} :`, err)
+    console.log(`Error Creating ${voiceQueue.voiceCallPatchTatatele} :`, err)
 }
