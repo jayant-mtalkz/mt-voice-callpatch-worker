@@ -67,11 +67,11 @@ try {
                     // console.log("call_id: " + call_id)
 
                     const mapKey = `REQMAP:voice:${call_id}}`
-                    console.log("mapkey: " + mapKey)
+                    // console.log("mapkey: " + mapKey)
                     const mapValue = { requestid, call_id, apikey, number }
-                    console.log("mapvalue: " + mapValue)
+                    // console.log("mapvalue: " + mapValue)
                     await redis.set(mapKey, JSON.stringify(mapValue), 'ex', DefaultTTL)
-                    console.log("after setting redis key 1***********************");
+                    // console.log("after setting redis key 1***********************");
 
                     const numKey = `REQM:${apikey}:${requestid}:${number}`
                     const numValue = { number: payload.data.to, status: "call_originated", call_id }
