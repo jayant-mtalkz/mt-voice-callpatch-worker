@@ -53,8 +53,8 @@ try {
                     headers: voiceApiHeaders,
                 })
 
-                console.log("##########################");
-                console.log(resp.data);
+                // console.log("##########################");
+                // console.log(resp.data);
 
                 // Checking if the call is picked or not
 
